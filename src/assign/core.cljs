@@ -48,9 +48,13 @@
              (render [_]
                (html
                 [:div
-                 [:input {:on-change #(-> % .-target .-value assign!)}]
-                 "Assignee is: "
-                 (-> data :assignee str)]))))
+                 [:div
+                  [:label "Enter DXXX: "]
+                  [:input {:on-change #(-> % .-target .-value assign!)}]]
+                 [:hr]
+                 [:div
+                  "Assignee is: "
+                  (-> data :assignee (or "") name)]]))))
          app-state
          {:target (js/document.getElementById "app")})
 

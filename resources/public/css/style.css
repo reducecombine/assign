@@ -1,2 +1,12 @@
-/* some style */
+body {
+  font-size: 18px;
+}
 
+div {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+input {
+  text-align: right;
+}

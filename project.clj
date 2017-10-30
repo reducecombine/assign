@@ -37,7 +37,7 @@
                 :compiler {:output-to "resources/public/js/compiled/assign.js"
                            :main assign.core
                            :foreign-libs [{:file "js_libraries/random_seed.js" :provides ["skratchdot.random-seed"]}]
-                           :optimizations :simple
+                           :optimizations :advanced
                            :pretty-print false}}]}
 
   :figwheel {:css-dirs ["resources/public/css"]

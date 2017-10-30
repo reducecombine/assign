@@ -22,13 +22,13 @@
   :cljsbuild {:builds
               [{:id "dev"
                 :source-paths ["src"]
-
                 :figwheel {:on-jsload "assign.core/on-js-reload"
                            :open-urls ["http://localhost:3449/index.html"]}
 
                 :compiler {:main assign.core
                            :asset-path "js/compiled/out"
                            :output-to "resources/public/js/compiled/assign.js"
+                           :foreign-libs [{:file "js_libraries/random_seed.js" :provides ["skratchdot.random-seed"]}]
                            :output-dir "resources/public/js/compiled/out"
                            :source-map-timestamp true
                            :preloads [devtools.preload]}}
@@ -36,7 +36,8 @@
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/js/compiled/assign.js"
                            :main assign.core
-                           :optimizations :advanced
+                           :foreign-libs [{:file "js_libraries/random_seed.js" :provides ["skratchdot.random-seed"]}]
+                           :optimizations :simple
                            :pretty-print false}}]}
 
   :figwheel {:css-dirs ["resources/public/css"]

@@ -2,6 +2,7 @@
   (:require
    [om.core :as om]
    [sablono.core :refer-macros [html]]
+   [skratchdot.random-seed]
    [clojure.string :as str])
   (:import
    [goog.testing PseudoRandom]))
@@ -9,21 +10,40 @@
 (defonce app-state
   (atom {:assignee nil}))
 
+(defn even-pseudo-random [seed]
+  (-> seed js/uheprng.create .random str (str/split ".") last (get 3) int))
+
+(comment
+  "Certain keys are very slighly more likely to be assigned so `reviewers` is defined in a special order. You can check it with:"
+  (->>
+   (range 2000)
+   (map even-pseudo-random)
+   (frequencies)
+   (sort-by second)
+   (reverse)))
+
 (def reviewers
-  [nil ;; have to include nil, since the last number of a random number will never be 0
-   :jborell
-   :aramos
-   :vemv
-   :mrivero
-   :jsanchez])
+  {0 :jborrell
+   7 :jborrell
+   6 :aramos
+   5 :aramos
+   1 :mrivero
+   9 :mrivero
+   4 :vemv
+   8 :vemv
+   3 :jsanchez
+   2 :jsanchez})
+
+(comment
+  "Check fairness with:"
+  (->> (range 800 3000)
+       (map even-pseudo-random)
+       (map reviewers)
+       frequencies))
 
 (defn assign! [text-input]
-  (when-let [n (re-find #"[0-9]+" text-input)]
-    (let [random-numbers (-> n (js/parseInt 10) PseudoRandom. .random str (str/split ".") last reverse)
-          random-numbers (map int random-numbers)
-          chosen (first (map (partial get reviewers)
-                             random-numbers))]
-      (swap! app-state assoc :assignee chosen))))
+  (swap! app-state assoc :assignee (when-let [n (re-find #"[0-9]+" text-input)]
+                                     (-> n (js/parseInt 10) even-pseudo-random reviewers))))
 
 (om/root (fn [data owner]
            (reify om/IRender

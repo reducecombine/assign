@@ -3,9 +3,7 @@
    [om.core :as om]
    [sablono.core :refer-macros [html]]
    [skratchdot.random-seed]
-   [clojure.string :as str])
-  (:import
-   [goog.testing PseudoRandom]))
+   [clojure.string :as str]))
 
 (defonce app-state
   (atom {:assignee nil}))
